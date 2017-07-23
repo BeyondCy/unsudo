@@ -8,6 +8,6 @@ fn main() {
         libc::getgroups(groupcount, groups.as_mut_ptr());
         let newgroups = groups.drain(..).filter(|&x| x != 10).collect::<Vec<u32>>();
         libc::setgroups(newgroups.len(), newgroups.as_ptr());
-        libc::system(b"/bin/bash\x00".as_ptr() as *const _);
+        libc::system([std::env::args().nth(1).unwrap_or("bash".to_string()).as_bytes(), &[0 as u8]].concat().as_ptr() as *const _);
     }
 }
